@@ -1,5 +1,5 @@
 const process = require('process')
-const { ConsumerStream } = require('omnistreams')
+const { ConsumerStream } = require('omnistreams-core')
 
 
 class WriteStreamAdapter extends ConsumerStream {
@@ -16,7 +16,6 @@ class WriteStreamAdapter extends ConsumerStream {
     }
 
     this._nodeStream.on('close', () => {
-      console.log("term 1")
       this.terminate()
     })
 
