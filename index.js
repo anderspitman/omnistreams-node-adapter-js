@@ -137,12 +137,19 @@ class WriteStreamAdapter extends Consumer {
 
   _end() {
     this._allReceived = true
+    if (this._nodeStream !== process.stdout) {
+      this._nodeStream.end()
+    }
   }
 
   // TODO: need to handle when upstream terminates
   _terminate() {
-    this._nodeStream.destroy()
-    this._terminateCallback()
+    if (!this._terminated) {
+      this._terminated = true
+
+      this._nodeStream.destroy()
+      this._terminateCallback()
+    }
   }
 }
 
