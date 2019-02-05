@@ -137,7 +137,9 @@ class WriteStreamAdapter extends Consumer {
 
   _end() {
     this._allReceived = true
-    if (this._nodeStream !== process.stdout) {
+    // if this._bufferedElements.length is not zero then we need to wait on the
+    // drain above before closing the node stream
+    if (this._bufferedElements.length === 0 && this._nodeStream !== process.stdout) {
       this._nodeStream.end()
     }
   }
