@@ -16,12 +16,7 @@ class ReadStreamAdapter extends Producer {
 
     this._allRead = false
 
-    this._bytesRead = 0
-    this._bytesWritten = 0
-
     nodeStream.on('data', (data) => {
-
-      this._bytesRead += data.length
 
       queue.push(data)
 
@@ -55,8 +50,6 @@ class ReadStreamAdapter extends Producer {
     }
 
     if (this._allRead && this._queue.length === 0) {
-      console.log("total read: " + this._bytesRead)
-      console.log("total written: " + this._bytesWritten)
       this._endCallback()
     }
   }
