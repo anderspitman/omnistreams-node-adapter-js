@@ -1,7 +1,7 @@
 const process = require('process')
 const fs = require('fs')
 //const { encodeObject, decodeObject, Multiplexer } = require('omnistreams')
-const { ReadStreamAdapter, WriteStreamAdapter } = require('omnistreams-node-adapter')
+const { ReadStreamAdapter, WriteStreamAdapter, UnbufferedWriteStreamAdapter } = require('omnistreams-node-adapter')
 
 const fileReadStream = fs.createReadStream('in.bam')
 const fileWriteStream = fs.createWriteStream('out.bam')
@@ -23,16 +23,26 @@ const producer = new ReadStreamAdapter({
 //
 //producer.request(1)
 
-const consumer = new WriteStreamAdapter({
-  nodeStream: fileWriteStream,
-  bufferSize: 10,
-})
+
+
+
+
+//const consumer = new WriteStreamAdapter({
+//  nodeStream: fileWriteStream,
+//  bufferSize: 10,
+//})
+
+const consumer = new UnbufferedWriteStreamAdapter(fileWriteStream)
 
 producer.pipe(consumer)
 
 consumer.onFinish(() => {
   //ws.close()
 })
+
+
+
+
 
 //fileReadStream.on('data', (data) => {
 //  consumer.write(new Uint8Array(data))

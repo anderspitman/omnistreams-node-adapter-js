@@ -2,6 +2,60 @@ const process = require('process')
 const { Consumer } = require('omnistreams-core')
 
 
+class UnbufferedWriteStreamAdapter extends Consumer {
+  constructor(nodeStream) {
+    super()
+
+    this._ready = false
+    this._nodeStream = nodeStream
+
+    this._finished = false
+
+    this._nodeStream.on('close', () => {
+      if (!this._finished) {
+        this.terminate()
+      }
+    })
+
+    // Immediately request 1 element when onRequest is called. This gets things
+    // flowing. Have to be sure to call the original version though
+    this.onRequest = (callback) => {
+      super.onRequest(callback)
+      this._ready = true
+      this._requestCallback(1)
+    }
+  }
+
+  _write(data) {
+    if (!this._ready) {
+      throw "UnbufferedWriteStreamAdapter: Attempt to write more data than requested"
+    }
+
+    const readyForMore = this._nodeStream.write(data)
+    if (!readyForMore) {
+      this._ready = false
+      this._nodeStream.once('drain', () => {
+        this._ready = true
+        this._requestCallback(1)
+      })
+    }
+    else {
+      // TODO: figure out how to test this path explicitly. The drain path
+      // satisfies the tests but in theory could be much slower.
+      this._requestCallback(1)
+    }
+  }
+
+  _end() {
+    this._finished = true
+    this._nodeStream.end()
+  }
+
+  _terminate() {
+    this._nodeStream.destroy()
+  }
+}
+
 // TODO: probably have a warning or something if buffer size is exceeded
 class WriteStreamAdapter extends Consumer {
   constructor(options) {
@@ -96,5 +150,6 @@ class WriteStreamAdapter extends Consumer {
 
 
 module.exports = {
-  WriteStreamAdapter
+  WriteStreamAdapter,
+  UnbufferedWriteStreamAdapter,
 }
