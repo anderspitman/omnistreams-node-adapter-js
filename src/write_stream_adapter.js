@@ -17,6 +17,12 @@ class UnbufferedWriteStreamAdapter extends Consumer {
       }
     })
 
+    this._nodeStream.on('error', () => {
+      if (!this._finished) {
+        this.terminate()
+      }
+    })
+
     // Immediately request 1 element when onRequest is called. This gets things
     // flowing. Have to be sure to call the original version though
     this.onRequest = (callback) => {
@@ -52,7 +58,9 @@ class UnbufferedWriteStreamAdapter extends Consumer {
   }
 
   _terminate() {
-    this._nodeStream.destroy()
+    // Emit dummy error. This is necessary because Node 8 doesn't emit
+    // close on destroy apparently.
+    this._nodeStream.destroy(Error("Dummy error"))
   }
 }
 

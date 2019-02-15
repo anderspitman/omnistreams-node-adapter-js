@@ -95,7 +95,7 @@ describe('UnbufferedWriteStreamAdapter', function() {
         }
       })
 
-      this.timeout(100)
+      this.timeout(10)
       writeStream.on('finish', () => {
         done()
       })
@@ -110,11 +110,11 @@ describe('UnbufferedWriteStreamAdapter', function() {
 
       const writeStream = new Writable({
         write(chunk, encoding, callback) {
-        }
+        },
       })
 
-      this.timeout(100)
-      writeStream.on('close', () => {
+      this.timeout(10)
+      writeStream.on('error', () => {
         done()
       })
 
@@ -133,7 +133,7 @@ describe('UnbufferedWriteStreamAdapter', function() {
 
       const consumer = new UnbufferedWriteStreamAdapter(writeStream)
 
-      this.timeout(100)
+      this.timeout(10)
       consumer.onTermination(() => {
         done()
       })
