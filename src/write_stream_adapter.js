@@ -31,7 +31,7 @@ class UnbufferedWriteStreamAdapter extends Consumer {
       throw "UnbufferedWriteStreamAdapter: Attempt to write more data than requested"
     }
 
-    const readyForMore = this._nodeStream.write(data)
+    const readyForMore = this._nodeStream.write(Buffer.from(data))
     if (!readyForMore) {
       this._ready = false
       this._nodeStream.once('drain', () => {
