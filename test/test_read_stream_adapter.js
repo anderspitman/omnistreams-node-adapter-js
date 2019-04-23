@@ -1,6 +1,6 @@
 const { assert, expect } = require('chai')
 const { Readable } = require('stream')
-const { ReadStreamAdapter } = require('../')
+import { ReadStreamAdapter } from '../index.mjs';
 
 describe('ReadStreamAdapter', function() {
   it ('has a constructor', function() {

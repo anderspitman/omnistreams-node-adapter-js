@@ -1,6 +1,6 @@
 const { assert, expect } = require('chai')
 const { Writable } = require('stream')
-const { WriteStreamAdapter, UnbufferedWriteStreamAdapter } = require('../')
+import { WriteStreamAdapter, UnbufferedWriteStreamAdapter } from '../index.mjs';
 
 describe('UnbufferedWriteStreamAdapter', function() {
   describe('#constructor', function() {
