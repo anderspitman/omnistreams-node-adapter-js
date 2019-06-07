@@ -1,5 +1,5 @@
-const process = require('process')
-const { Consumer } = require('omnistreams-core')
+import process from 'process';
+import { Consumer } from 'omnistreams';
 
 
 class UnbufferedWriteStreamAdapter extends Consumer {
@@ -157,7 +157,4 @@ class WriteStreamAdapter extends Consumer {
 }
 
 
-module.exports = {
-  WriteStreamAdapter,
-  UnbufferedWriteStreamAdapter,
-}
+export { WriteStreamAdapter, UnbufferedWriteStreamAdapter };

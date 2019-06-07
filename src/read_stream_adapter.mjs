@@ -1,4 +1,4 @@
-const { Producer } = require('omnistreams-core')
+import { Producer } from 'omnistreams';
 
 
 // TODO: should probably allow the user to specify a chunk size and
@@ -55,6 +55,4 @@ class ReadStreamAdapter extends Producer {
 }
 
 
-module.exports = {
-  ReadStreamAdapter,
-}
+export { ReadStreamAdapter };
