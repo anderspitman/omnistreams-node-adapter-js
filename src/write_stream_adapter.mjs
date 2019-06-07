@@ -23,6 +23,11 @@ class UnbufferedWriteStreamAdapter extends Consumer {
       }
     })
 
+    this._nodeStream.on('finish', () => {
+      this._finished = true
+      this._finishCallback()
+    })
+
     // Immediately request 1 element when onRequest is called. This gets things
     // flowing. Have to be sure to call the original version though
     this.onRequest = (callback) => {
