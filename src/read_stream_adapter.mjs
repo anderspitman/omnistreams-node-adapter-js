@@ -28,6 +28,7 @@ class ReadStreamAdapter extends Producer {
 
     this._nodeStream.on('end', () => {
       this._allRead = true
+      this._flushData();
     })
   }
 
